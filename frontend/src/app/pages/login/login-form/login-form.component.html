@@ -1,0 +1,34 @@
+<form
+  tuiAppearance="floating"
+  tuiCardLarge
+  tuiForm="l"
+  [formGroup]="form"
+  [style.max-width.rem]="32"
+  class="login-form"
+>
+  <header tuiHeader>
+    <hgroup tuiTitle>
+      <h1>Войти</h1>
+    </hgroup>
+  </header>
+  <tui-textfield>
+    <label tuiLabel>Телефон</label>
+    <input
+      formControlName="phone"
+      placeholder="+799999999999"
+      tuiTextfield
+      type="tel"
+    />
+  </tui-textfield>
+  <tui-error formControlName="phone" [error]="[] | tuiFieldError | async" />
+  <tui-textfield>
+    <label tuiLabel>Пароль</label>
+    <input type="password" formControlName="password" tuiTextfield />
+  </tui-textfield>
+
+  <tui-error formControlName="password" [error]="[] | tuiFieldError | async" />
+  <footer>
+    <button tuiButton type="submit" size="m">Войти</button>
+    <button tuiButton size="m" appearance="flat-grayscale">Регистрация</button>
+  </footer>
+</form>
