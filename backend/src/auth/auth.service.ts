@@ -24,7 +24,7 @@ export class AuthService {
   login(user: UserEntity) {
     const payload = { sub: user.id };
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: this.jwtService.sign(payload, { expiresIn: '1m' }),
       refresh_token: this.jwtService.sign(payload, { expiresIn: '2h' }),
     };
   }
