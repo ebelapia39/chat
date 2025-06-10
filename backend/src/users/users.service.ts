@@ -1,22 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { UserEntity } from './entities/user.entity';
+import { UsersRepository } from './user.repository';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
-  private readonly users: UserEntity[] = [
-    {
-      id: 1,
-      phone: '79999999999',
-      password: '12345',
-    },
-    {
-      id: 2,
-      phone: '78888888888',
-      password: '12345',
-    },
-  ];
+  constructor(private userRepository: UsersRepository) {}
 
   findByPhone(phone: string) {
-    return this.users.find((user) => user.phone === phone);
+    return this.userRepository.user({ phone });
+  }
+
+  createUser(data: Prisma.UserCreateInput) {
+    return this.userRepository.createUser(data);
   }
 }

@@ -1,8 +1,17 @@
-import { Controller, Post, UseGuards, Request, Req, Get } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  UseGuards,
+  Request,
+  Req,
+  Get,
+  Body,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RequestUser } from './interfaces/request.interface';
 import { LocalAuthGuard } from './guards/local-auth.guarв';
 import { Public } from 'decorators/public.decorator';
+import { RegisterBody } from './interfaces/register.interface';
 
 @Controller('auth')
 export class AuthController {
@@ -13,6 +22,12 @@ export class AuthController {
   @Post('login')
   login(@Req() request: RequestUser) {
     return this.authService.login(request.user);
+  }
+
+  @Public()
+  @Post('register')
+  register(@Body() data: RegisterBody) {
+    return this.authService.register(data);
   }
 
   @Get('me')
