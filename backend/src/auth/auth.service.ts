@@ -1,12 +1,12 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from '../users/users.service';
 import { RegisterBody } from './interfaces/register.interface';
-import { Prisma, User } from '@prisma/client';
+import { User } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
+import { ResponseLogin } from './interfaces/response-login.interface';
 
 @Injectable()
 export class AuthService {
@@ -26,18 +26,22 @@ export class AuthService {
     return null;
   }
 
-  login(user: User) {
-    const payload = { sub: user.id };
+  login(user: User): ResponseLogin {
+    const payload = { id: user.id, nickname: user.nickname, name: user.name };
     return {
-      access_token: this.jwtService.sign(payload, { expiresIn: '1m' }),
+      access_token: this.jwtService.sign(payload, { expiresIn: '1h' }),
       refresh_token: this.jwtService.sign(payload, { expiresIn: '2h' }),
     };
   }
 
-  register(body: RegisterBody) {
+  generatePasswordHash(password: string, rounds = 10) {
+    return bcrypt.hash(password, rounds);
+  }
+
+  async register(body: RegisterBody) {
     return this.usersService.createUser({
       phone: body.phone,
-      password: body.password,
+      password: await this.generatePasswordHash(body.password),
       nickname: body.nickname,
     });
   }

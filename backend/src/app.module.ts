@@ -13,6 +13,11 @@ import configuration from '../config';
     AuthModule,
     UsersModule,
     ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath:
+        process.env.NODE_ENV === 'test'
+          ? './test/.env.test.local'
+          : '.env.development.local',
       load: configuration,
     }),
   ],

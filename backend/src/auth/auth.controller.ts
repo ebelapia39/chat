@@ -10,7 +10,7 @@ import {
 import { AuthService } from './auth.service';
 import { RequestUser } from './interfaces/request.interface';
 import { LocalAuthGuard } from './guards/local-auth.guarв';
-import { Public } from 'decorators/public.decorator';
+import { Public } from '../../decorators/public.decorator';
 import { RegisterBody } from './interfaces/register.interface';
 
 @Controller('auth')
