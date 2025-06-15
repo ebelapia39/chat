@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
-import { RegisterBody } from './interfaces/register.interface';
 import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { ResponseLogin } from './interfaces/response-login.interface';
+import { ErorCodes } from '../errors';
+import { RegisterDto } from './dto/register.dto.interface';
 
 @Injectable()
 export class AuthService {
@@ -39,7 +40,27 @@ export class AuthService {
     return bcrypt.hash(password, rounds);
   }
 
-  async register(body: RegisterBody) {
+  async register(body: RegisterDto) {
+    const existingUserByPhone = await this.usersService.findByPhone(body.phone);
+
+    if (existingUserByPhone) {
+      throw new HttpException(
+        ErorCodes.UserWithPhoneAlreadyExist,
+        HttpStatus.CONFLICT,
+      );
+    }
+
+    const existingUserByNickname = await this.usersService.findByNickname(
+      body.nickname,
+    );
+
+    if (existingUserByNickname) {
+      throw new HttpException(
+        ErorCodes.UserWithNicknameAlreadyExist,
+        HttpStatus.CONFLICT,
+      );
+    }
+
     return this.usersService.createUser({
       phone: body.phone,
       password: await this.generatePasswordHash(body.password),

@@ -10,6 +10,10 @@ export class UsersService {
     return this.userRepository.user({ phone });
   }
 
+  findByNickname(nickname: string) {
+    return this.userRepository.user({ nickname });
+  }
+
   createUser(data: Prisma.UserCreateInput) {
     return this.userRepository.createUser(data);
   }

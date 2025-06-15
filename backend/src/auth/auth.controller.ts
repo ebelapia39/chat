@@ -11,7 +11,8 @@ import { AuthService } from './auth.service';
 import { RequestUser } from './interfaces/request.interface';
 import { LocalAuthGuard } from './guards/local-auth.guarв';
 import { Public } from '../../decorators/public.decorator';
-import { RegisterBody } from './interfaces/register.interface';
+import { RegisterDto } from './dto/register.dto.interface';
+import { ResponseMe } from './interfaces/response-me.interface';
 
 @Controller('auth')
 export class AuthController {
@@ -26,12 +27,12 @@ export class AuthController {
 
   @Public()
   @Post('register')
-  register(@Body() data: RegisterBody) {
+  register(@Body() data: RegisterDto) {
     return this.authService.register(data);
   }
 
   @Get('me')
   getProfile(@Req() request: RequestUser) {
-    return { user: request.user };
+    return { user: request.user } as ResponseMe;
   }
 }

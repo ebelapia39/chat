@@ -1,4 +1,4 @@
-export interface RegisterBody {
+export interface RegisterDto {
   phone: string;
   password: string;
   nickname: string;
